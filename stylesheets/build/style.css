@@ -37,9 +37,19 @@ h1 {
   padding: 0 2.5%;
 }
 
+.titleButtons {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.titleButtons li:not(:last-child) {
+  margin-right: 1em;
+}
+
 .credits {
   list-style: none;
   display: flex;
+  align-items: center;
 }
 .credits li:not(:last-child) {
   margin-right: 0.5em;
@@ -110,6 +120,17 @@ blockquote {
 
 .heightIcon {
   margin-right: 15px;
+}
+
+#editInfo {
+  color: black;
+  background: none;
+}
+#editInfo:disabled {
+  display: none;
+}
+#editInfo:hover {
+  outline: 1px solid black;
 }
 
 @media only screen and (min-width: 768px) {

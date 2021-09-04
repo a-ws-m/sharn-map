@@ -24,6 +24,7 @@ const infoBox = $("#infobox");
 function showHelp() {
     // Show the help information from the landing screen
     infoBox.html(helpInfo);
+    $("#editInfo").prop("disabled", true);
 }
 
 function showSelected() {
@@ -279,7 +280,10 @@ function showInfo(districtId: string | void) {
     middleInfo.html(middleDesc);
     lowerInfo.html(lowerDesc);
 
+    // Set district ID indicator
     $("#districtId").text(districtId);
+    // Enable edit button
+    $("#editInfo").prop("disabled", false);
 }
 
 function setDistrictName(nameElement: JQuery<HTMLElement>, name: string, height?: string) {

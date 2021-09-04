@@ -13,6 +13,7 @@ var infoBox = (0, jquery_1.default)("#infobox");
 function showHelp() {
     // Show the help information from the landing screen
     infoBox.html(helpInfo);
+    (0, jquery_1.default)("#editInfo").prop("disabled", true);
 }
 function showSelected() {
     // Check if there's a district already selected and update info if so,
@@ -232,7 +233,10 @@ function showInfo(districtId) {
     upperInfo.html(upperDesc);
     middleInfo.html(middleDesc);
     lowerInfo.html(lowerDesc);
+    // Set district ID indicator
     (0, jquery_1.default)("#districtId").text(districtId);
+    // Enable edit button
+    (0, jquery_1.default)("#editInfo").prop("disabled", false);
 }
 function setDistrictName(nameElement, name, height) {
     // Set a district name for a given height
