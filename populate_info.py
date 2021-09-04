@@ -15,7 +15,7 @@ boilerplate_district = {
     "description": "",
     "notableLocations": {"name": [], "description": []},
 }
-wards = {
+quarters = {
     "cliffside": "Cliffside",
     "tavicks": "Tavick's Landing",
     "menthis": "Menthis Plateau",
@@ -57,10 +57,10 @@ other_districts = {
 
 district_dict = {}
 for district_id, names in other_districts.items():
-    ward_heights = ("lower", "middle", "upper")
+    quarter_heights = ("lower", "middle", "upper")
 
     district_entry = {}
-    for height, district_name in zip(ward_heights, names):
+    for height, district_name in zip(quarter_heights, names):
         template_dict = dict(**boilerplate_district)
         template_dict["name"] = district_name
         district_entry[height] = template_dict
@@ -73,7 +73,7 @@ for district_id, readable_name in cliffside_districts.items():
     cliffside_district["name"] = readable_name
     district_dict[district_id] = cliffside_district
 
-for ward_id, ward_name in wards.items():
-    district_dict[ward_id] = {"name": ward_name, "description": ""}
+for quarter_id, quarter_name in quarters.items():
+    district_dict[quarter_id] = {"name": quarter_name, "description": ""}
 
 JSON_FILE.write_text(json.dumps(district_dict, indent=4, sort_keys=True))

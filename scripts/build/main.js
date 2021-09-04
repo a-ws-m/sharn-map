@@ -143,15 +143,15 @@ function showInfo(districtId) {
     if (!districtId) {
         return;
     }
-    var wardIds = {
+    var quarterIds = {
         "C": "central",
         "M": "menthis",
         "T": "tavicks",
         "N": "northedge",
         "D": "dura"
     };
-    var ward = (0, jquery_1.default)("#ward");
-    var wardInfo = (0, jquery_1.default)("#wardInfo");
+    var quarter = (0, jquery_1.default)("#quarter");
+    var quarterInfo = (0, jquery_1.default)("#quarterInfo");
     var upperDistrict = (0, jquery_1.default)("#upperDistrict");
     var middleDistrict = (0, jquery_1.default)("#middleDistrict");
     var lowerDistrict = (0, jquery_1.default)("#lowerDistrict");
@@ -161,14 +161,14 @@ function showInfo(districtId) {
     var upperSection = (0, jquery_1.default)("#upperSection");
     var middleSection = (0, jquery_1.default)("#middleSection");
     var lowerSection = (0, jquery_1.default)("#lowerSection");
-    // Determine ward name
+    // Determine quarter name
     var isCliffside = true;
-    var wardKey = "cliffside";
-    for (var key in wardIds) {
-        if (Object.hasOwnProperty.call(wardIds, key)) {
-            var currentWard = wardIds[key];
+    var quarterKey = "cliffside";
+    for (var key in quarterIds) {
+        if (Object.hasOwnProperty.call(quarterIds, key)) {
+            var currentquarter = quarterIds[key];
             if (districtId.startsWith(key)) {
-                wardKey = currentWard;
+                quarterKey = currentquarter;
                 isCliffside = false;
                 break;
             }
@@ -213,11 +213,11 @@ function showInfo(districtId) {
     var upperLocNames = upperLocs["name"];
     var upperLocDescs = upperLocs["description"];
     addNotableLocations(upperLocNames, upperLocDescs, upperSection);
-    // And handle ward names
-    var wardEntry = descriptions[wardKey];
-    var wardName = wardEntry["name"];
-    var wardDesc = descToHtml(wardEntry["description"]);
-    ward.text(wardName);
+    // And handle quarter names
+    var quarterEntry = descriptions[quarterKey];
+    var quarterName = quarterEntry["name"];
+    var quarterDesc = descToHtml(quarterEntry["description"]);
+    quarter.text(quarterName);
     if (isCliffside) {
         setDistrictName(upperDistrict, upperName);
         middleDistrict.html("");
@@ -228,7 +228,7 @@ function showInfo(districtId) {
         setDistrictName(middleDistrict, middleName, "middle");
         setDistrictName(lowerDistrict, lowerName, "lower");
     }
-    wardInfo.html(wardDesc);
+    quarterInfo.html(quarterDesc);
     upperInfo.html(upperDesc);
     middleInfo.html(middleDesc);
     lowerInfo.html(lowerDesc);

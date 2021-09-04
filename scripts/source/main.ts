@@ -6,11 +6,11 @@ interface locationsDict {
     name: string[];
     description: string[];
 }
-interface wardEntry {
+interface quarterEntry {
     name: string;
     description: string;
 }
-interface levelEntry extends wardEntry {
+interface levelEntry extends quarterEntry {
     notableLocations: locationsDict;
 }
 type districtEntry = levelEntry | { upper: levelEntry, middle: levelEntry, lower: levelEntry };
@@ -175,15 +175,15 @@ function showInfo(districtId: string | void) {
     if (!districtId) {
         return;
     }
-    const wardIds: { [x: string]: string } = {
+    const quarterIds: { [x: string]: string } = {
         "C": "central",
         "M": "menthis",
         "T": "tavicks",
         "N": "northedge",
         "D": "dura"
     };
-    const ward = $("#ward");
-    const wardInfo = $("#wardInfo");
+    const quarter = $("#quarter");
+    const quarterInfo = $("#quarterInfo");
 
     const upperDistrict = $("#upperDistrict");
     const middleDistrict = $("#middleDistrict");
@@ -197,14 +197,14 @@ function showInfo(districtId: string | void) {
     const middleSection = $("#middleSection");
     const lowerSection = $("#lowerSection");
 
-    // Determine ward name
+    // Determine quarter name
     let isCliffside = true;
-    let wardKey = "cliffside";
-    for (const key in wardIds) {
-        if (Object.hasOwnProperty.call(wardIds, key)) {
-            const currentWard = wardIds[key];
+    let quarterKey = "cliffside";
+    for (const key in quarterIds) {
+        if (Object.hasOwnProperty.call(quarterIds, key)) {
+            const currentquarter = quarterIds[key];
             if (districtId.startsWith(key)) {
-                wardKey = currentWard;
+                quarterKey = currentquarter;
                 isCliffside = false;
                 break;
             }
@@ -258,12 +258,12 @@ function showInfo(districtId: string | void) {
     let upperLocDescs = upperLocs["description"];
     addNotableLocations(upperLocNames, upperLocDescs, upperSection);
 
-    // And handle ward names
-    const wardEntry = descriptions[wardKey];
-    const wardName = wardEntry["name"];
-    const wardDesc = descToHtml(wardEntry["description"]);
+    // And handle quarter names
+    const quarterEntry = descriptions[quarterKey];
+    const quarterName = quarterEntry["name"];
+    const quarterDesc = descToHtml(quarterEntry["description"]);
 
-    ward.text(wardName);
+    quarter.text(quarterName);
     if (isCliffside) {
         setDistrictName(upperDistrict, upperName);
         middleDistrict.html("");
@@ -274,7 +274,7 @@ function showInfo(districtId: string | void) {
         setDistrictName(lowerDistrict, lowerName, "lower");
     }
 
-    wardInfo.html(wardDesc);
+    quarterInfo.html(quarterDesc);
     upperInfo.html(upperDesc);
     middleInfo.html(middleDesc);
     lowerInfo.html(lowerDesc);
