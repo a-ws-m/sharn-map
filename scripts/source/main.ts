@@ -21,10 +21,47 @@ var helpInfo: string;
 
 const infoBox = $("#infobox");
 
+function editSection(editButton: JQuery<HTMLElement>) {
+    // Open edit box for section
+    const selectedId = selectedDistrict?.attr("id");
+    const level = editButton.attr("name");
+    if (!selectedId || !level) {
+        return;
+    }
+    const infoContainer = $(`#${level}Info`);
+    const districtEntry = descriptions[selectedId];
+
+    // May be Cliffside entry, or have several levels
+    const currentDescription = districtEntry["description"] ?? districtEntry[level]["description"];
+
+    // Get everything but locations table
+    const descriptionDom = infoContainer.children().not(".locationsTable");
+    let descriptionHeight = 0;
+    descriptionDom.each(
+        function (this: HTMLElement) {
+            descriptionHeight += $(this).outerHeight(true) ?? 0;
+        }
+    );
+    descriptionDom.remove();
+
+    const textArea = $("<textarea></textarea>");
+    textArea.text(currentDescription);
+    textArea.height(descriptionHeight);
+    infoContainer.prepend(textArea);
+    /*
+        TODO:
+            * Make edit buttons into submission buttons
+            * Save changes when done
+            * Add locations table edit + adding functionality
+            * Add "Download JSON" button
+            * Add quarter description editing functionality
+    */
+}
+
 function showHelp() {
     // Show the help information from the landing screen
     infoBox.html(helpInfo);
-    $("#editInfo").prop("disabled", true);
+    $(".editInfo").prop("disabled", true);
 }
 
 function showSelected() {
@@ -71,7 +108,7 @@ function postMapLoad() {
 
     // Add click event listeners to districts
     const districts = $(".districts>path");
-    districts.on("click", function (this: JQuery<HTMLElement>) {
+    districts.on("click", function (this: HTMLElement) {
         const $this = $(this);
         if (selectedDistrict?.attr("id") === $this.attr("id")) {
             deselectDistrict();
@@ -120,6 +157,11 @@ function initialize() {
 
     // Check hashtag in URL
     window.addEventListener("hashchange", selectFromHash);
+
+    // Add edit button handler
+    $(".editInfo").on("click", function (this: HTMLElement) {
+        editSection($(this));
+    });
 }
 
 function selectFromHash() {
@@ -198,6 +240,10 @@ function showInfo(districtId: string | void) {
     const middleSection = $("#middleSection");
     const lowerSection = $("#lowerSection");
 
+    const upperEditBtn = upperSection.find(".editInfo");
+    const middleEditBtn = middleSection.find(".editInfo");
+    const lowerEditBtn = lowerSection.find(".editInfo");
+
     // Determine quarter name
     let isCliffside = true;
     let quarterKey = "cliffside";
@@ -267,12 +313,18 @@ function showInfo(districtId: string | void) {
     quarter.text(quarterName);
     if (isCliffside) {
         setDistrictName(upperDistrict, upperName);
+        upperEditBtn.prop("disabled", false);
         middleDistrict.html("");
+        middleEditBtn.prop("disabled", true);
         lowerDistrict.html("");
+        lowerEditBtn.prop("disabled", true);
     } else {
         setDistrictName(upperDistrict, upperName, "upper");
+        upperEditBtn.prop("disabled", false);
         setDistrictName(middleDistrict, middleName, "middle");
+        middleEditBtn.prop("disabled", false);
         setDistrictName(lowerDistrict, lowerName, "lower");
+        lowerEditBtn.prop("disabled", false);
     }
 
     quarterInfo.html(quarterDesc);
@@ -310,9 +362,7 @@ function setDistrictName(nameElement: JQuery<HTMLElement>, name: string, height?
     }
 
     const heightIcon = document.createElement("i");
-    heightIcon.classList.add("heightIcon");
-    heightIcon.classList.add("bi");
-    heightIcon.classList.add(`bi-arrow-${direction}-square-fill`);
+    heightIcon.classList.add("heightIcon", "bi", `bi-arrow-${direction}-square-fill`);
 
     nameElement.append(heightIcon);
     nameElement.append(nameText);

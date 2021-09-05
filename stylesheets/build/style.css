@@ -37,15 +37,6 @@ h1 {
   padding: 0 2.5%;
 }
 
-.titleButtons {
-  list-style: none;
-  display: flex;
-  align-items: center;
-}
-.titleButtons li:not(:last-child) {
-  margin-right: 1em;
-}
-
 .credits {
   list-style: none;
   display: flex;
@@ -86,6 +77,10 @@ button {
   font-weight: bold;
 }
 
+#districtLink {
+  padding: 10px 17px;
+}
+
 input[type=file] {
   font-size: 100px;
   position: absolute;
@@ -106,7 +101,8 @@ input[type=file] {
   content: "JSON ID: ";
 }
 
-.quarterTitle {
+.quarterTitle,
+.districtTitle {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -122,15 +118,20 @@ blockquote {
   margin-right: 15px;
 }
 
-#editInfo {
+.editInfo {
   color: black;
   background: none;
 }
-#editInfo:disabled {
+.editInfo:disabled {
   display: none;
 }
-#editInfo:hover {
+.editInfo:hover {
   outline: 1px solid black;
+}
+
+textarea {
+  resize: vertical;
+  width: 100%;
 }
 
 @media only screen and (min-width: 768px) {

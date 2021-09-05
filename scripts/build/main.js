@@ -10,10 +10,35 @@ var descriptions;
 var selectedDistrict;
 var helpInfo;
 var infoBox = (0, jquery_1.default)("#infobox");
+function editSection(editButton) {
+    var _a;
+    // Open edit box for section
+    var selectedId = selectedDistrict === null || selectedDistrict === void 0 ? void 0 : selectedDistrict.attr("id");
+    var level = editButton.attr("name");
+    if (!selectedId || !level) {
+        return;
+    }
+    var infoContainer = (0, jquery_1.default)("#" + level + "Info");
+    var districtEntry = descriptions[selectedId];
+    // May be Cliffside entry, or have several levels
+    var currentDescription = (_a = districtEntry["description"]) !== null && _a !== void 0 ? _a : districtEntry[level]["description"];
+    // Get everything but locations table
+    var descriptionDom = infoContainer.children().not(".locationsTable");
+    var descriptionHeight = 0;
+    descriptionDom.each(function () {
+        var _a;
+        descriptionHeight += (_a = (0, jquery_1.default)(this).outerHeight(true)) !== null && _a !== void 0 ? _a : 0;
+    });
+    descriptionDom.remove();
+    var textArea = (0, jquery_1.default)("<textarea></textarea>");
+    textArea.text(currentDescription);
+    textArea.height(descriptionHeight);
+    infoContainer.prepend(textArea);
+}
 function showHelp() {
     // Show the help information from the landing screen
     infoBox.html(helpInfo);
-    (0, jquery_1.default)("#editInfo").prop("disabled", true);
+    (0, jquery_1.default)(".editInfo").prop("disabled", true);
 }
 function showSelected() {
     // Check if there's a district already selected and update info if so,
@@ -100,6 +125,10 @@ function initialize() {
     });
     // Check hashtag in URL
     window.addEventListener("hashchange", selectFromHash);
+    // Add edit button handler
+    (0, jquery_1.default)(".editInfo").on("click", function () {
+        editSection((0, jquery_1.default)(this));
+    });
 }
 function selectFromHash() {
     // Select district based on hash in URL
@@ -162,6 +191,9 @@ function showInfo(districtId) {
     var upperSection = (0, jquery_1.default)("#upperSection");
     var middleSection = (0, jquery_1.default)("#middleSection");
     var lowerSection = (0, jquery_1.default)("#lowerSection");
+    var upperEditBtn = upperSection.find(".editInfo");
+    var middleEditBtn = middleSection.find(".editInfo");
+    var lowerEditBtn = lowerSection.find(".editInfo");
     // Determine quarter name
     var isCliffside = true;
     var quarterKey = "cliffside";
@@ -221,13 +253,19 @@ function showInfo(districtId) {
     quarter.text(quarterName);
     if (isCliffside) {
         setDistrictName(upperDistrict, upperName);
+        upperEditBtn.prop("disabled", false);
         middleDistrict.html("");
+        middleEditBtn.prop("disabled", true);
         lowerDistrict.html("");
+        lowerEditBtn.prop("disabled", true);
     }
     else {
         setDistrictName(upperDistrict, upperName, "upper");
+        upperEditBtn.prop("disabled", false);
         setDistrictName(middleDistrict, middleName, "middle");
+        middleEditBtn.prop("disabled", false);
         setDistrictName(lowerDistrict, lowerName, "lower");
+        lowerEditBtn.prop("disabled", false);
     }
     quarterInfo.html(quarterDesc);
     upperInfo.html(upperDesc);
@@ -260,9 +298,7 @@ function setDistrictName(nameElement, name, height) {
             return;
     }
     var heightIcon = document.createElement("i");
-    heightIcon.classList.add("heightIcon");
-    heightIcon.classList.add("bi");
-    heightIcon.classList.add("bi-arrow-" + direction + "-square-fill");
+    heightIcon.classList.add("heightIcon", "bi", "bi-arrow-" + direction + "-square-fill");
     nameElement.append(heightIcon);
     nameElement.append(nameText);
 }
